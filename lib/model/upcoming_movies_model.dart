@@ -1,129 +1,109 @@
 class UpcomingMoviesModel {
-  List<Results> results;
   int page;
-  int totalResults;
-  Dates dates;
+  List<ResultsUpcomingMovies> results;
   int totalPages;
+  int totalResults;
+  String error;
 
   UpcomingMoviesModel(
-      {this.results,
-        this.page,
-        this.totalResults,
-        this.dates,
-        this.totalPages});
+      {this.page,
+        this.results,
+        this.totalPages,
+        this.totalResults});
+
+  UpcomingMoviesModel.withError(String errorMessage) {
+    error = errorMessage;
+  }
 
   UpcomingMoviesModel.fromJson(Map<String, dynamic> json) {
+    page = json['page'];
     if (json['results'] != null) {
-      results = new List<Results>();
+      results = <ResultsUpcomingMovies>[];
       json['results'].forEach((v) {
-        results.add(new Results.fromJson(v));
+        results.add(new ResultsUpcomingMovies.fromJson(v));
       });
     }
-    page = json['page'];
-    totalResults = json['total_results'];
-    dates = json['dates'] != null ? new Dates.fromJson(json['dates']) : null;
     totalPages = json['total_pages'];
+    totalResults = json['total_results'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['page'] = this.page;
     if (this.results != null) {
       data['results'] = this.results.map((v) => v.toJson()).toList();
     }
-    data['page'] = this.page;
-    data['total_results'] = this.totalResults;
-    if (this.dates != null) {
-      data['dates'] = this.dates.toJson();
-    }
     data['total_pages'] = this.totalPages;
+    data['total_results'] = this.totalResults;
     return data;
   }
 }
 
-class Results {
-  double popularity;
-  int voteCount;
-  bool video;
-  String posterPath;
-  int id;
+class ResultsUpcomingMovies {
   bool adult;
   String backdropPath;
+  List<int> genreIds;
+  int id;
   String originalLanguage;
   String originalTitle;
-  List<int> genreIds;
-  String title;
-  double voteAverage;
   String overview;
+  double popularity;
+  String posterPath;
   String releaseDate;
+  String title;
+  bool video;
+  double voteAverage;
+  int voteCount;
 
-  Results(
-      {this.popularity,
-        this.voteCount,
-        this.video,
-        this.posterPath,
-        this.id,
-        this.adult,
+  ResultsUpcomingMovies(
+      {this.adult,
         this.backdropPath,
+        this.genreIds,
+        this.id,
         this.originalLanguage,
         this.originalTitle,
-        this.genreIds,
-        this.title,
-        this.voteAverage,
         this.overview,
-        this.releaseDate});
+        this.popularity,
+        this.posterPath,
+        this.releaseDate,
+        this.title,
+        this.video,
+        this.voteAverage,
+        this.voteCount});
 
-  Results.fromJson(Map<String, dynamic> json) {
-    popularity = json['popularity'];
-    voteCount = json['vote_count'];
-    video = json['video'];
-    posterPath = json['poster_path'];
-    id = json['id'];
+  ResultsUpcomingMovies.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
+    genreIds = json['genre_ids'].cast<int>();
+    id = json['id'];
     originalLanguage = json['original_language'];
     originalTitle = json['original_title'];
-    genreIds = json['genre_ids'].cast<int>();
-    title = json['title'];
-    voteAverage = json['vote_average'];
     overview = json['overview'];
+    popularity = double.parse(json['popularity'].toString());
+    posterPath = json['poster_path'];
     releaseDate = json['release_date'];
+    title = json['title'];
+    video = json['video'];
+    voteAverage = double.parse(json['vote_average'].toString());
+    voteCount = json['vote_count'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['popularity'] = this.popularity;
-    data['vote_count'] = this.voteCount;
-    data['video'] = this.video;
-    data['poster_path'] = this.posterPath;
-    data['id'] = this.id;
     data['adult'] = this.adult;
     data['backdrop_path'] = this.backdropPath;
+    data['genre_ids'] = this.genreIds;
+    data['id'] = this.id;
     data['original_language'] = this.originalLanguage;
     data['original_title'] = this.originalTitle;
-    data['genre_ids'] = this.genreIds;
-    data['title'] = this.title;
-    data['vote_average'] = this.voteAverage;
     data['overview'] = this.overview;
+    data['popularity'] = this.popularity;
+    data['poster_path'] = this.posterPath;
     data['release_date'] = this.releaseDate;
-    return data;
-  }
-}
-
-class Dates {
-  String maximum;
-  String minimum;
-
-  Dates({this.maximum, this.minimum});
-
-  Dates.fromJson(Map<String, dynamic> json) {
-    maximum = json['maximum'];
-    minimum = json['minimum'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['maximum'] = this.maximum;
-    data['minimum'] = this.minimum;
+    data['title'] = this.title;
+    data['video'] = this.video;
+    data['vote_average'] = this.voteAverage;
+    data['vote_count'] = this.voteCount;
     return data;
   }
 }

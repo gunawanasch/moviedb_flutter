@@ -2,19 +2,27 @@ class PopularMoviesModel {
   int page;
   int totalResults;
   int totalPages;
-  List<Results> results;
+  List<ResultsPopularMovies> results;
+  String error;
 
   PopularMoviesModel(
-      {this.page, this.totalResults, this.totalPages, this.results});
+      {this.page,
+        this.totalResults,
+        this.totalPages,
+        this.results});
+
+  PopularMoviesModel.withError(String errorMessage) {
+    error = errorMessage;
+  }
 
   PopularMoviesModel.fromJson(Map<String, dynamic> json) {
     page = json['page'];
     totalResults = json['total_results'];
     totalPages = json['total_pages'];
     if (json['results'] != null) {
-      results = new List<Results>();
+      results = <ResultsPopularMovies>[];
       json['results'].forEach((v) {
-        results.add(new Results.fromJson(v));
+        results.add(new ResultsPopularMovies.fromJson(v));
       });
     }
   }
@@ -31,7 +39,7 @@ class PopularMoviesModel {
   }
 }
 
-class Results {
+class ResultsPopularMovies {
   double popularity;
   int voteCount;
   bool video;
@@ -47,7 +55,7 @@ class Results {
   String overview;
   String releaseDate;
 
-  Results(
+  ResultsPopularMovies(
       {this.popularity,
         this.voteCount,
         this.video,
@@ -63,8 +71,8 @@ class Results {
         this.overview,
         this.releaseDate});
 
-  Results.fromJson(Map<String, dynamic> json) {
-    popularity = json['popularity'];
+  ResultsPopularMovies.fromJson(Map<String, dynamic> json) {
+    popularity = double.parse(json['popularity'].toString());
     voteCount = json['vote_count'];
     video = json['video'];
     posterPath = json['poster_path'];
@@ -75,7 +83,7 @@ class Results {
     originalTitle = json['original_title'];
     genreIds = json['genre_ids'].cast<int>();
     title = json['title'];
-    voteAverage = json['vote_average'];
+    voteAverage = double.parse(json['vote_average'].toString());
     overview = json['overview'];
     releaseDate = json['release_date'];
   }
